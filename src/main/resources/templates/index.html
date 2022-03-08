@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="kr">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.0"></script>
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <head>
+        
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+    <style>
+        body {
+            height: 100%;
+            width: 99%;
+            background-color: rgb(248, 248, 248);
+        }
+        content {
+            text-align: center;
+        }
+        #site-box {
+            margin-bottom: 1em;
+            margin-left: 92%;
+            border-radius: 7%;
+        }
+        #app {
+            margin-top: 10em;
+        }
+        #app .content-item input {
+            font-size: 2em;
+            margin: 3px;
+        }
+        body div button {
+            margin-top: 1em;
+            font-size: 2em;
+            background-color: aqua;
+        }
+        footer {
+            position: absolute;
+            bottom: 0px;
+            width: 99%;
+            border: 1px solid skyblue;
+            background-color: skyblue;
+        }
+    </style>
+    
+    <body>
+        <div id="app">
+
+            <header></header>
+
+            <!-- content start -->
+            <content>
+                <div class="content-item">
+                    <input id="userID" type="text" placeholder="ID" v-model="userID"><br>
+                    <input id="userPwd" type="password" placeholder="PW" v-model="userPwd"><br>
+                </div>
+                <div>
+                    <button @click="loginBtn">로그인</button>
+                </div>
+            </content>
+            <!-- content end -->
+            
+            <!-- footer start -->
+            <footer>
+                <div class="footer-item">
+                    <p>
+            주식회사 세스코                                                 개인정보처리방침<br>
+            서울특별시 강동구 상일로 10길 46 (세스코 터치센터)<br><br>
+        
+            copyright 2022 cesco all rights reserved.
+                    </p>
+                    <select name="site-box" id="site-box" @change="siteChange($event)">
+                        <option>패밀리사이트</option>
+                        <option value="cesco">세스코홈페이지</option>
+                        <option value="cescoMall">세스코쇼핑몰</option>
+                        <option value="gwCesco">세스코그룹웨어</a></option>
+                    </select>
+                </div>
+            </footer>
+            <!-- footer end -->
+        </div>
+    </body>
+
+    <script>
+        new Vue({
+            el: "#app",
+            data() {
+                return {
+                    userID: "",
+                    userPwd: "",
+                }
+            },
+            methods: {
+                loginBtn(){
+                    if (this.userID && this.userPwd) {
+                        alert("로그인");
+                        location.href="/board"
+                    }else if (!this.userID) {
+                        alert("아이디를 입력해주세요.")
+                        $("#userID").val("");
+                        $("#userID").focus();
+                        
+                    }else if (!this.userPwd) {
+                        alert("비밀번호를 입력해주세요.")
+                        $("#userPwd").val("");
+                        $("#userPwd").focus();
+                    }
+                },
+                siteChange(event){
+                    switch(event.target.value){
+                        case "cesco":
+                            window.open("https://www.cesco.co.kr");
+                            break;
+                        case "cescoMall":
+                            window.open("https://mall.cesco.co.kr");
+                            break;
+                        case "gwCesco":
+                            window.open("https://gw.cesco.co.kr");
+                            break;
+                    }
+                }
+            },
+        })
+    </script>
+
+</html>
