@@ -1,5 +1,7 @@
 package example.demo.models;
 
+import org.springframework.lang.Nullable;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,6 +11,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class UserInfo {
 
+    @Nullable
+    private long userNo;
     private String userID;
     private String userPwd;
 

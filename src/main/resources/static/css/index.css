@@ -3,7 +3,7 @@
             width: 99%;
             background-color: rgb(248, 248, 248);
         }
-        content {
+        section {
             text-align: center;
         }
         #site-box {
@@ -14,7 +14,7 @@
         #app {
             margin-top: 10em;
         }
-        #app .content-item input {
+        #app .section-item input {
             font-size: 2em;
             margin: 3px;
         }
@@ -30,4 +30,3 @@
             border: 1px solid skyblue;
             background-color: skyblue;
         }
-

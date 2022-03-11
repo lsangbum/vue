@@ -1,16 +1,194 @@
-<!DOCTYPE html>
-<html lang="kr">
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.0"></script>
-    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<!DOCTYPE html >
+<htmll xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}">
+    
     <head>
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.6.0"></script>
+        <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <link rel="stylesheet" href="css/board.css" type="text/css">
+
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Document</title>
     </head>
+
+    <!-- body start -->
     <body>
-        <div>
-            
+        <div id="wrap">
+            <!-- header start -->
+            <header>
+                <div class="header-item" id="header-item-id">
+                    <div>
+                        <label for="">My Test Web System</label>
+                        <span id="header-span" >
+                            {{ userID }} 님 으로 접속중입니다.  <button @click="logoutBtn">로그아웃</button>
+                        </span>
+                    </div>
+                </div>
+                <div class="header-item">
+                    <div>
+                        MENU> 상품조회 | FAQ
+                    </div>
+                </div>
+            </header>
+            <!-- header end -->
+
+            <!-- section start -->
+            <section>
+                <div id="board-label">
+                    <label for="">◎상품조회</label>
+                </div>
+                <div>
+                    <input type="text" placeholder="품목명" v-model="productName">
+                    <input type="text" placeholder="품목코드" v-model="productCode">
+                    <select v-model="useYN">
+                        <option v-for="i in test" :value="i.value" >{{ i.text }}</option>
+                    </select>
+                    <span>
+                        <button @click="searchBtn">▼조회</button>
+                        <button @click="excelSaveBtn">▦엑셀</button>
+                    </span>
+                </div>
+                <div>
+                    <table id="table">
+                        <tr>
+                            <th>no</th>
+                            <th>품목구분</th>
+                            <th>품목코드</th>
+                            <th>품목명</th>
+                            <th>사양</th>
+                            <th>설명</th>
+                            <th>과세구분</th>
+                            <th>단위</th>
+                        </tr>
+                        <!-- for start -->
+                        <tr>
+                            <td>1</td>
+                            <td>2</td>
+                            <td>3</td>
+                            <td>4</td>
+                            <td>5</td>
+                            <td>6</td>
+                            <td>7</td>
+                            <td>8</td>
+                        </tr>
+                        <!-- for end -->
+                    </table>
+                </div>
+            </section>
+            <!-- section end -->
+
+            <th:block layout:fragment="footerFragment">
+
+            </th:block>
+
+            <!-- footer start -->
+            <!-- <footer>
+                <div class="footer-item">
+                    <p>
+            주식회사 세스코                                                 개인정보처리방침<br>
+            서울특별시 강동구 상일로 10길 46 (세스코 터치센터)<br><br>
+
+            copyright 2022 cesco all rights reserved.
+                    </p>
+                    <select name="site-box" id="site-box" @change="siteChange($event)">
+                        <option>패밀리사이트</option>
+                        <option value="cesco">세스코홈페이지</option>
+                        <option value="cescoMall">세스코쇼핑몰</option>
+                        <option value="gwCesco">세스코그룹웨어</a></option>
+                    </select>
+                </div>
+            </footer> -->
+            <!-- footer end -->
         </div>
     </body>
+    <!-- body end -->
+
+    <script>
+        new Vue({
+            el: "#wrap",
+            data() {
+                return {
+                    userID: "[[${userID}]]",
+                    productName: "",
+                    productCode: "",
+                    useYN: "Y",
+                    test: [
+                        {
+                            text: "전체",
+                            value: "all",
+                    },{
+                            text: "사용",
+                            value: "Y",
+                    },{
+                            text: "미사용",
+                            value: "N",
+                    }
+
+                ]
+                }
+            },
+            methods: {
+                /**
+                 * 작성자 : 이상범
+                 * 주요기능 : 로그아웃 
+                 */
+                logoutBtn() {
+                    if (confirm("로그아웃하시겠습니까?")){
+                        alert("로그아웃");
+                        location.href="/logout";
+                    }
+                },
+                /**
+                 * 작성자 : 이상범
+                 * 주요기능 : 품목명, 코드, 사용여부 기반 제품목록 출력
+                 */
+                searchBtn() {
+                    alert("조회");
+                    alert(this.productName + this.productCode + this.useYN);
+                },
+                /**
+                 * 작성자 : 이상범
+                 * 주요기능 : 출력데이터 엑셀파일 저장
+                 */
+                excelSaveBtn() {
+                    alert("엑셀저장")
+                    let tab_text = '<html xmlns:x="urn:schemas-microsoft-com:office:excel">'
+                    tab_text += '<head><meta http-equiv="content-type" content="application/vnd.ms-excel; charset=UTF-8">'
+                    tab_text += '<xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet>'
+                    tab_text += '<x:Name>Test Sheet</x:Name>'
+                    tab_text += '<x:WorksheetOptions><x:Panes></x:Panes></x:WorksheetOptions></x:ExcelWorksheet>'
+                    tab_text += '</x:ExcelWorksheets></x:ExcelWorkbook></xml></head><body>'
+                    tab_text += "<table>"
+                    const temp = document.getElementById('table').innerHTML
+                    // console.log(temp)
+                    tab_text += temp
+                    tab_text += '</table></body></html>'
+                    console.log(tab_text)
+                    const fileName = 'exampleTable.xls'
+                    const a_tag = document.createElement('a')
+                    const blob = new Blob([tab_text], { type: 'application/vnd.ms-excel;charset=utf-8;' })
+                    a_tag.href = window.URL.createObjectURL(blob)
+                    a_tag.download = fileName
+                    a_tag.click()
+                },
+                siteChange(event){
+                    switch(event.target.value){
+                        case "cesco":
+                            window.open("https://www.cesco.co.kr");
+                            break;
+                        case "cescoMall":
+                            window.open("https://mall.cesco.co.kr");
+                            break;
+                        case "gwCesco":
+                            window.open("https://gw.cesco.co.kr");
+                            break;
+                    }
+                }
+            },
+        })
+
+    </script>
 </html>
